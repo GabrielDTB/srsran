@@ -41,6 +41,4 @@ stdenv.mkDerivation rec {
   # Breaking purity is required because srsRAN compilation depends
   # on the instruction set of the compiling computer.
   NIX_ENFORCE_NO_NATIVE = "0";
-
-  cmakeFlags = [ "-DENABLE_WERROR=OFF" ];
 }

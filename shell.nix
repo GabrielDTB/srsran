@@ -1,7 +1,7 @@
 { pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/88a55dffa4d44d294c74c298daf75824dc0aafb5.tar.gz") {}
 }:
 let
-  stdenv = pkgs.gcc12Stdenv;
+  stdenv = pkgs.llvmPackages.stdenv;
 in
 stdenv.mkDerivation rec {
   pname = "srsran";
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = with pkgs; [
     cmake
     pkg-config
+    mold
   ];
 
   buildInputs = with pkgs; [
@@ -37,6 +38,10 @@ stdenv.mkDerivation rec {
     gtest
     lksctp-tools
   ];
+
+  NIX_LDFLAGS = "-fuse-ld=mold";
+  CFLAGS = "-Wno-unused-command-line-argument";
+  CXXFLAGS = "-Wno-unused-command-line-argument";
 
   cmakeFlags = [ "-DENABLE_WERROR=OFF" ];
 }
